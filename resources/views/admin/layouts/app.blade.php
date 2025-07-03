@@ -1,27 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin - Tiệm Sách</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>{{ config('app.name', 'Laravel') }}</title>
+    <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
     @vite('resources/css/app.css')
+
 </head>
-<body class="bg-gray-100">
-    <nav class="bg-blue-600 text-white p-4">
-        <div class="container mx-auto flex justify-between">
-            <div>
-                <a href="{{ route('admin.dashboard') }}" class="mr-4">Dashboard</a>
-                <a href="{{ route('admin.books.index') }}" class="mr-4">Sách</a>
-                <a href="{{ route('admin.orders.index') }}">Đơn hàng</a>
-            </div>
-            @auth('admin')
-                <form action="{{ route('admin.logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="text-white">Đăng xuất</button>
-                </form>
-            @endauth
+<body class="font-sans antialiased h-screen">
+
+
+    <div class="flex h-full">
+        <div class="w-64 bg-gray-100 border-r">
+            @include('admin.layouts.navigation')
         </div>
-    </nav>
-    <div class="container mx-auto p-4">
-        @yield('content')
+        <div class="flex-1 bg-gray-100 overflow-y-auto">
+            @if (session('status'))
+                <div class="mb-4 font-medium text-sm text-green-600">
+                    {{ session('status') }}
+                </div>
+            @endif
+
+            @yield('content')
+        </div>
     </div>
+
 </body>
 </html>

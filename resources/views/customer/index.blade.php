@@ -14,7 +14,7 @@
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
         @foreach ($books as $book)
         <div class="bg-white rounded-xl shadow hover:shadow-lg transition duration-300 overflow-hidden">
-            <img src="{{ asset('storage/covers/' . $book->cover_image) }}" alt="{{ $book->title }}" class="w-full h-48 object-cover">
+            <img src="{{ asset('storage/app/public/uploads' . $book->cover_image) }}" alt="{{ $book->title }}" class="w-full h-48 object-cover">
             <div class="p-4">
                 <h3 class="text-md font-semibold truncate">{{ $book->title }}</h3>
                 <p class="text-sm text-gray-600 mb-1 truncate">{{ $book->author }}</p>

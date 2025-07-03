@@ -33,6 +33,11 @@ class BookController extends Controller
             'category_id' => 'required|exists:categories,id',
         ]);
 
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('books', 'public');
+        }
+
         Book::create([
             'id' => Str::uuid()->toString(),
             'title' => $request->title,

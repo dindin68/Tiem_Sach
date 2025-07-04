@@ -20,8 +20,7 @@ return new class extends Migration
             $table->integer('stock');
             $table->integer('imported');
             $table->integer('sold');
-            $table->string('category_id',50)->nullable();
-            
+            $table->string('category_id',50)->nullable();           
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null');
             $table->timestamps();
         });

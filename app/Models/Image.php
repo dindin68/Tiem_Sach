@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Image extends Model
 {
+    protected $primaryKey = 'id';
     public $incrementing = false;
     protected $keyType = 'string';
     protected $fillable = ['id', 'book_id', 'path'];
@@ -15,4 +16,5 @@ class Image extends Model
     {
         return $this->belongsTo(Book::class);
     }
+    public $timestamps = false;
 }

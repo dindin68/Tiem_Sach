@@ -44,6 +44,10 @@ class Book extends Model
     {
         return $this->hasMany(Image::class);
     }
+    public function getPrimaryImageAttribute()
+    {
+        return $this->images()->first()?->path;
+    }
 
     public function reviews(): HasMany
     {

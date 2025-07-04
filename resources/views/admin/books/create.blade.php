@@ -4,6 +4,24 @@
     <h1 class="text-2xl font-bold text-blue-600 mb-4">Thêm sách mới</h1>
     <form method="POST" action="{{ route('admin.books.store') }}" enctype="multipart/form-data">
         @csrf
+         <div class="mb-4">
+            <label for="id" class="block text-gray-700">Mã Sách</label>
+            <input type="text" name="id" id="id" value="{{ old('id') }}" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+            @error('id')
+                <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+            @enderror
+        </div>
+        <div class="mb-4">
+            <label for="images" class="block text-gray-700">Hình ảnh</label>
+            <input type="file" name="images[]" id="images" multiple
+                class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            @error('images')
+                <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+            @enderror
+            @error('images.*')
+                <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+            @enderror
+        </div>
         <div class="mb-4">
             <label for="title" class="block text-gray-700">Tiêu đề</label>
             <input type="text" name="title" id="title" value="{{ old('title') }}" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" required>
@@ -25,13 +43,7 @@
                 <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
             @enderror
         </div>
-        <div class="mb-4">
-            <label for="image" class="block text-gray-700">Hình ảnh</label>
-            <input type="file" name="image" id="image" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-            @error('image')
-                <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
-            @enderror
-        </div>
+        
         <div class="mb-4">
             <label for="price" class="block text-gray-700">Giá (USD)</label>
             <input type="number" name="price" id="price" step="0.01" value="{{ old('price') }}" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" required>

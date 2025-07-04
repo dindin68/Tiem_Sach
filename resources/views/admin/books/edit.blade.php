@@ -2,9 +2,31 @@
 @section('content')
 <div class="container mx-auto p-4 max-w-md">
     <h1 class="text-2xl font-bold text-blue-600 mb-4">Sửa sách</h1>
-    <form method="POST" action="{{ route('admin.books.update', $book) }}">
+    <form method="POST" action="{{ route('admin.books.update', $book) }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
+
+        <div class="mb-4">
+        <label class="block text-gray-700">Hình ảnh hiện tại</label>
+            <div class="flex flex-wrap gap-2">
+                @foreach ($book->images as $image)
+                    <div class="w-24 h-32 border rounded overflow-hidden">
+                        <img src="{{ Storage::url($image->path) }}" class="object-cover w-full h-full">
+                    </div>
+                @endforeach
+            </div>
+        </div>
+        <div class="mb-4">
+            <label for="images" class="block text-gray-700">Hình ảnh</label>
+            <input type="file" name="images[]" id="images" multiple
+                class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            @error('images')
+                <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+            @enderror
+            @error('images.*')
+                <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+            @enderror
+        </div>
         <div class="mb-4">
             <label for="title" class="block text-gray-700">Tiêu đề</label>
             <input type="text" name="title" id="title" value="{{ old('title', $book->title) }}" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" required>

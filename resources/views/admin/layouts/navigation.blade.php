@@ -1,9 +1,9 @@
-<nav x-data="{ open: false }" class="top-0 left-0 h-screen w-64 bg-brown-100 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-transform duration-300 ease-in-out z-50">
+<nav x-data="{ open: false }" class="top-0 left-0 h-screen w-64 bg-brown-100 border-r border-gray-200 transition-transform duration-300 ease-in-out z-50">
     <div class="flex flex-col h-full">
         <!-- Logo -->
-        <div class="p-4 border-b border-gray-200 dark:border-gray-700 w-48">
+        <div class="p-4 border-b border-gray-200 w-48">
             <a href="{{ route('admin.dashboard') }}" class="flex items-center">
-                <x-application-logo class="h-8 w-auto fill-current text-green-600 dark:text-gray-200" />
+                <x-application-logo class="h-8 w-auto fill-current text-green-600" />
             </a>
         </div>
 
@@ -49,14 +49,14 @@
         </div>
 
         <!-- User Info and Logout -->
-        <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+        <div class="p-4 border-t border-gray-200">
             <div class="flex items-center mb-4">
                 <div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden">
                     <!-- Placeholder for user avatar, replace with actual image if available -->
                     <span class="text-gray-600">{{ strtoupper(substr(Auth::guard('admin')->user()->name, 0, 1)) }}</span>
                 </div>
                 <div class="ml-3">
-                    <div class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ Auth::guard('admin')->user()->name }}</div>
+                    <div class="text-sm font-medium text-gray-800">{{ Auth::guard('admin')->user()->name }}</div>
                     <div class="text-xs text-gray-500">{{ Auth::guard('admin')->user()->email }}</div>
                 </div>
             </div>

@@ -22,21 +22,13 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(Request $request)
+    public function store(LoginRequest $request): RedirectResponse
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
+        $request->authenticate();
 
-        if (Auth::guard('web')->attempt($credentials)) {
-            $request->session()->regenerate();
-            return redirect()->intended(route('home'));
-        }
+        $request->session()->regenerate();
 
-        return back()->withErrors([
-            'email' => 'Thông tin đăng nhập không đúng.',
-        ])->onlyInput('email');
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 
     /**

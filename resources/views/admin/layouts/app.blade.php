@@ -14,7 +14,7 @@
 
 
     <div class="flex h-full">
-        <div class="w-64 bg-gray-100 border-r">
+        <div class="w-48 bg-gray-100 border-r">
             @include('admin.layouts.navigation')
         </div>
         <div class="flex-1 bg-gray-100 overflow-y-auto">

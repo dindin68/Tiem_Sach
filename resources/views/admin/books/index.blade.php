@@ -1,16 +1,34 @@
 @extends('admin.layouts.app')
 @section('content')
 <div class="container mx-auto p-4">
-    <h1 class="text-2xl font-bold text-blue-600 mb-4">Quản lý sách</h1>
-    @if (session('success'))
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-            {{ session('success') }}
-        </div>
-    @endif
-    <a href="{{ route('admin.books.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block hover:bg-blue-600">Thêm sách mới</a>
+    <div class="flex justify-between p-6 mt-2 bg-brown-100 dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <h2 class="text-2xl font-bold text-brown-800">Danh Sách Sách</h2>
+
+            <div class="flex flex-row mt-4">
+                    <!-- Tìm kiếm -->
+                <div class="relative w-72">
+                    <input
+                        type="text"
+                        placeholder="Tìm kiếm sách..."
+                        class="w-full h-10 pr-10 border border-gray-300 rounded-lg shadow-sm
+                            focus:outline-none focus:ring-2 focus:ring-blue-500" />
+
+                    <div class="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+                        <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                            d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z" />
+                        </svg>
+                </div>
+
+                </div>
+                    <a href="{{ route('admin.books.create') }}" class=" inline-block bg-green-400 text-white px-4 py-2 rounded">Thêm Sách Mới</a>
+                </div>                   
+            </div>
     <table class="w-full border-collapse">
         <thead>
             <tr class="bg-gray-200">
+                <th class="border p-2">Mã Sách</th>
+                <th class="border p-2">Hình ảnh</th>
                 <th class="border p-2">Tiêu đề</th>
                 <th class="border p-2">Tác giả</th>
                 <th class="border p-2">Giá</th>
@@ -21,10 +39,18 @@
         </thead>
         <tbody>
             @foreach ($books as $book)
-            <tr>
+            <tr>                
+                <td class="border p-2">{{ $book->id }}</td>
+                <td class="border p-2">
+                    @if ($book->images->first())
+                        <img src="{{ Storage::url($book->images->first()->path) }}" alt="{{ $book->title }}" class="w-16 h-16 object-cover">
+                    @else
+                        <div class="w-16 h-16 bg-gray-200 flex items-center justify-center">No Image</div>
+                    @endif
+                </td>
                 <td class="border p-2">{{ $book->title }}</td>
                 <td class="border p-2">{{ $book->author }}</td>
-                <td class="border p-2">{{ number_format($book->price, 2) }} USD</td>
+                <td class="border p-2">{{ number_format($book->price) }} VND</td>
                 <td class="border p-2">{{ $book->stock }}</td>
                 <td class="border p-2">{{ $book->category->name }}</td>
                 <td class="border p-2">

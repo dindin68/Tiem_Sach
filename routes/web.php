@@ -4,17 +4,19 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\Admin\BookController;
+use App\Http\Controllers\BookController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Admin\PromotionController;
+use App\Http\Controllers\CategoryController;
+
 
 Route::get('/', [CustomerController::class, 'index'])->name('home'); // Trang chủ công khai
 
 Route::middleware('customer')->group(function () {
-    Route::get('/dashboard', [CustomerController::class, 'index'])->name('dashboard');
+    Route::get('/index', [CustomerController::class, 'index'])->name('customer.index');
     Route::get('/books', [CustomerController::class, 'books'])->name('books');
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/add/{book}', [CartController::class, 'add'])->name('cart.add');
@@ -40,13 +42,24 @@ Route::prefix('admin')->group(function () {
             'update' => 'admin.books.update',
             'destroy' => 'admin.books.destroy',
         ]);
+        
         Route::get('/orders', [AdminController::class, 'orders'])->name('admin.orders.index');
         Route::put('/admin/orders/{order}', [AdminController::class, 'updateOrder'])->name('admin.orders.update');
         Route::resource('promotions', PromotionController::class)->names([
         'index' => 'admin.promotions.index',
         'create' => 'admin.promotions.create',
         'store' => 'admin.promotions.store',
-    ]);
+        ]);
+
+        Route::resource('categories', CategoryController::class)->names([
+            'index' => 'admin.categories.index',
+            'create' => 'admin.categories.create',
+            'store' => 'admin.categories.store',
+            'edit' => 'admin.categories.edit',
+            'update' => 'admin.categories.update',
+            'destroy' => 'admin.categories.destroy',
+        ]);
+    
     });
 });
 

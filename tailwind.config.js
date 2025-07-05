@@ -20,7 +20,18 @@ export default {
                 '10': '2.5rem',
                 '14': '3.5rem',
                 '64': '16rem'
-            }
+            },
+             colors: {
+                    orange: {
+                        50:'#f0eae5',
+                    },
+                    green:{
+                        50: '#e5f4ed',
+                    },
+                    brown:{
+                        800: '#543b28',
+                    },
+             },
             
         },
     },

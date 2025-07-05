@@ -13,11 +13,11 @@
 <body class="font-sans antialiased h-screen">
 
 
-    <div class="flex h-full">
-        <div class="w-48 bg-gray-100 border-r">
+    <div class="flex h-full bg-white">
+        <div class="w-48 border-r">
             @include('admin.layouts.navigation')
         </div>
-        <div class="flex-1 bg-gray-100 overflow-y-auto">
+        <div class="flex-1 bg-white overflow-y-auto">
             @if (session('status'))
                 <div class="mb-4 font-medium text-sm text-green-600">
                     {{ session('status') }}

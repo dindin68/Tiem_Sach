@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container mx-auto p-4">
-    <div class="flex justify-between p-6 mt-2 bg-brown-100 dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+    <div class="flex justify-between p-6 mt-2 bg-orange-50 dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <h2 class="text-2xl font-bold text-brown-800">Danh Sách Thể Loại</h2>
 
             <div class="flex flex-row mt-4">

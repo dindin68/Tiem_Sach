@@ -45,7 +45,7 @@
         </div>
         
         <div class="mb-4">
-            <label for="price" class="block text-gray-700">Giá (USD)</label>
+            <label for="price" class="block text-gray-700">Giá</label>
             <input type="number" name="price" id="price" step="0.01" value="{{ old('price') }}" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" required>
             @error('price')
                 <div class="text-red-500 text-sm mt-1">{{ $message }}</div>

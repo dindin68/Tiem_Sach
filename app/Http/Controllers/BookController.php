@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Book;
+use App\Models\Promotion;
 use App\Models\Image;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -14,8 +15,9 @@ class BookController extends Controller
 {
     public function index()
     {
-        $books = Book::with(['category', 'images'])->paginate(12); // Load cả ảnh
-        return view('admin.books.index', compact('books'));
+        $books = Book::with(['category', 'images'])->paginate(12);
+        $promotions = Promotion::all();
+        return view('admin.books.index', compact('books','promotions'));
     }
 
     public function create()

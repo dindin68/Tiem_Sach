@@ -9,7 +9,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\Admin\PromotionController;
+use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\CategoryController;
 
 
@@ -45,11 +45,19 @@ Route::prefix('admin')->group(function () {
         
         Route::get('/orders', [AdminController::class, 'orders'])->name('admin.orders.index');
         Route::put('/admin/orders/{order}', [AdminController::class, 'updateOrder'])->name('admin.orders.update');
+        Route::get('/promotions/history', [PromotionController::class, 'showPromotionHistory'])->name('admin.promotions.history');
+
         Route::resource('promotions', PromotionController::class)->names([
         'index' => 'admin.promotions.index',
         'create' => 'admin.promotions.create',
         'store' => 'admin.promotions.store',
+        'edit' => 'admin.promotions.edit',
+        'update' => 'admin.promotions.update',
+        'destroy' => 'admin.promotions.destroy',
         ]);
+        // Lịch sử khuyến mãi
+        Route::delete('/promotions/history/{id}', [PromotionController::class, 'deleteHistory'])->name('admin.promotions.history.delete');
+        Route::post('/promotions/apply', [PromotionController::class, 'applyToBooks'])->name('admin.promotions.apply');
 
         Route::resource('categories', CategoryController::class)->names([
             'index' => 'admin.categories.index',
@@ -59,6 +67,9 @@ Route::prefix('admin')->group(function () {
             'update' => 'admin.categories.update',
             'destroy' => 'admin.categories.destroy',
         ]);
+        
+        
+
     
     });
 });

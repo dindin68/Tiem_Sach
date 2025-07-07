@@ -14,11 +14,13 @@ class Book extends Model
         'id', 'title', 'author', 'publisher',
         'price', 'stock', 'imported', 'sold', 'category_id'
     ];
+    
 
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
+
 
     public function cartItems(): HasMany
     {
@@ -30,14 +32,30 @@ class Book extends Model
         return $this->hasMany(ImportItem::class);
     }
 
+    public function getDiscountedPriceAttribute()
+    {
+        $activePromotion = $this->promotions()
+            ->where('StartDate', '<=', now())
+            ->where('EndDate', '>=', now())
+            ->orderByDesc('DiscountPercentage')
+            ->first();
+
+        if ($activePromotion) {
+            return $this->price * (1 - $activePromotion->DiscountPercentage / 100);
+        }
+
+        return $this->price;
+    }
+
+
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
     }
 
-    public function promotionDetails(): HasMany
+    public function promotions()
     {
-        return $this->hasMany(PromotionDetail::class);
+        return $this->belongsToMany(Promotion::class, 'promotion_detail', 'book_id', 'promotion_id');
     }
 
     public function images(): HasMany

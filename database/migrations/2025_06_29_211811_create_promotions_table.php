@@ -16,6 +16,8 @@ return new class extends Migration
             $table->dateTime('start_date');
             $table->dateTime('end_date');
             $table->decimal('discount_percentage', 5, 2);
+            $table->timestamp('created_at')->nullable();
+
         });
     }
 

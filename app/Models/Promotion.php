@@ -11,8 +11,9 @@ class Promotion extends Model
     protected $keyType = 'string';
     protected $fillable = ['id', 'start_date', 'end_date', 'discount_percentage'];
 
-    public function details(): HasMany
+    public function books()
     {
-        return $this->hasMany(PromotionDetail::class);
+        return $this->belongsToMany(Book::class, 'promotion_detail', 'promotion_id', 'book_id');
     }
+
 }

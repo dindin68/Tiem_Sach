@@ -5,16 +5,16 @@
     <form method="POST" action="{{ route('admin.promotions.store') }}">
         @csrf
         <div class="mb-4">
-            <label for="code" class="block text-gray-700">Mã khuyến mãi</label>
-            <input type="text" name="code" id="code" value="{{ old('code') }}" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-            @error('code')
+            <label for="id" class="block text-gray-700">Mã khuyến mãi</label>
+            <input type="text" name="id" id="id" value="{{ old('id') }}" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+            @error('id')
                 <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
             @enderror
         </div>
         <div class="mb-4">
-            <label for="discount" class="block text-gray-700">Giảm giá (%)</label>
-            <input type="number" name="discount" id="discount" step="0.01" value="{{ old('discount') }}" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-            @error('discount')
+            <label for="discount_percentage" class="block text-gray-700">Giảm giá (%)</label>
+            <input type="number" name="discount_percentage" id="discount_percentage" step="0.01" value="{{ old('discount_percentage') }}" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+            @error('discount_percentage')
                 <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
             @enderror
         </div>

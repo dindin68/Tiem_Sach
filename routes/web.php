@@ -11,6 +11,8 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\AuthorController;
+
 
 
 Route::get('/', [CustomerController::class, 'index'])->name('home'); // Trang chủ công khai
@@ -33,6 +35,7 @@ Route::prefix('admin')->group(function () {
 
     Route::middleware('admin')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+
         Route::resource('books', BookController::class)->names([
             'index' => 'admin.books.index',
             'create' => 'admin.books.create',
@@ -42,22 +45,15 @@ Route::prefix('admin')->group(function () {
             'update' => 'admin.books.update',
             'destroy' => 'admin.books.destroy',
         ]);
-        
-        Route::get('/orders', [AdminController::class, 'orders'])->name('admin.orders.index');
-        Route::put('/admin/orders/{order}', [AdminController::class, 'updateOrder'])->name('admin.orders.update');
-        Route::get('/promotions/history', [PromotionController::class, 'showPromotionHistory'])->name('admin.promotions.history');
 
-        Route::resource('promotions', PromotionController::class)->names([
-        'index' => 'admin.promotions.index',
-        'create' => 'admin.promotions.create',
-        'store' => 'admin.promotions.store',
-        'edit' => 'admin.promotions.edit',
-        'update' => 'admin.promotions.update',
-        'destroy' => 'admin.promotions.destroy',
+        Route::resource('authors', AuthorController::class)->names([
+            'index' => 'admin.authors.index',
+            'create' => 'admin.authors.create',
+            'store' => 'admin.authors.store',
+            'edit' => 'admin.authors.edit',
+            'update' => 'admin.authors.update',
+            'destroy' => 'admin.authors.destroy',
         ]);
-        // Lịch sử khuyến mãi
-        Route::delete('/promotions/history/{id}', [PromotionController::class, 'deleteHistory'])->name('admin.promotions.history.delete');
-        Route::post('/promotions/apply', [PromotionController::class, 'applyToBooks'])->name('admin.promotions.apply');
 
         Route::resource('categories', CategoryController::class)->names([
             'index' => 'admin.categories.index',
@@ -67,12 +63,25 @@ Route::prefix('admin')->group(function () {
             'update' => 'admin.categories.update',
             'destroy' => 'admin.categories.destroy',
         ]);
-        
-        
 
-    
+        Route::resource('promotions', PromotionController::class)->names([
+            'index' => 'admin.promotions.index',
+            'create' => 'admin.promotions.create',
+            'store' => 'admin.promotions.store',
+            'edit' => 'admin.promotions.edit',
+            'update' => 'admin.promotions.update',
+            'destroy' => 'admin.promotions.destroy',
+        ]);
+
+        Route::get('/promotions/history', [PromotionController::class, 'showPromotionHistory'])->name('admin.promotions.history');
+        Route::delete('/promotions/history/{id}', [PromotionController::class, 'deleteHistory'])->name('admin.promotions.history.delete');
+        Route::post('/promotions/apply', [PromotionController::class, 'applyToBooks'])->name('admin.promotions.apply');
+
+        Route::get('/orders', [AdminController::class, 'orders'])->name('admin.orders.index');
+        Route::put('/admin/orders/{order}', [AdminController::class, 'updateOrder'])->name('admin.orders.update');
     });
 });
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

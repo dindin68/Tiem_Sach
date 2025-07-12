@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -11,7 +12,7 @@ class Book extends Model
     public $incrementing = false;
     protected $keyType = 'string';
     protected $fillable = [
-        'id', 'title', 'author', 'publisher',
+        'id', 'title', 'author_id', 'publisher',
         'price', 'stock', 'imported', 'sold', 'category_id'
     ];
     
@@ -73,4 +74,9 @@ class Book extends Model
     }
 
     public const UPDATED_AT = null; 
+
+    public function authors()
+    {
+        return $this->belongsToMany(Author::class,'author_book','book_id','author_id');
+    }
 }

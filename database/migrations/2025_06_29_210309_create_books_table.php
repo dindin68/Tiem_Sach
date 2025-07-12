@@ -20,9 +20,12 @@ return new class extends Migration
             $table->integer('stock');
             $table->integer('imported');
             $table->integer('sold');
+            $table->string('author_id',50)->nullable();
+            $table->foreign('author_id')->references('id')->on('authors')->onDelete('set null');
             $table->string('category_id',50)->nullable();           
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null');
             $table->timestamp('created_at')->nullable();
+            
         });
     }
 

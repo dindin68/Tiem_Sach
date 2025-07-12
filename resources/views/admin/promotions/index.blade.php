@@ -40,10 +40,8 @@
             </thead>
             <tbody>
                 @forelse ($promotions as $promotion)
-                    @php
-                        $isActive = now()->between($promotion->start_date, $promotion->end_date);
-                    @endphp
-                    <tr class="{{ !$isActive ? 'bg-gray-100' : '' }}">
+                    
+                    <tr class=" bg-gray-100">
                         <td class="border px-4 py-2">{{ $promotion->id }}</td>
                         <td class="border px-4 py-2">{{ $promotion->discount_percentage }}</td>
                         <td class="border px-4 py-2">{{ $promotion->start_date }}</td>
@@ -55,7 +53,11 @@
                                 Không có sách
                             @endforelse
                         </td>
-                        <td class="border px-4 py-2">{{ $isActive ? 'Hoạt động' : 'Hết hiệu lực' }}</td>
+                        <td class="border px-4 py-2">
+                            <span class="{{ $promotion->isActive() ? 'text-green-600' : 'text-gray-500' }}">
+                                {{ $promotion->isActive() ? 'Hoạt động' : 'Hết hiệu lực' }}
+                            </span>
+                        </td>                        
                         <td class="border px-4 py-2">
                             <a href="{{ route('admin.promotions.edit', $promotion) }}" class="text-blue-500 hover:underline mr-2">Sửa</a>
                             <form action="{{ route('admin.promotions.destroy', $promotion) }}" method="POST" class="inline-block" onsubmit="return confirm('Xóa khuyến mãi này?')">

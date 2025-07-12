@@ -19,7 +19,8 @@ export default {
                 '32': '8rem',
                 '10': '2.5rem',
                 '14': '3.5rem',
-                '64': '16rem'
+                '64': '16rem',
+                '55': '13.75rem'
             },
              colors: {
                     orange: {

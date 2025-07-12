@@ -77,14 +77,25 @@
                         @endif
                     </td>
                     <td class="border p-2">{{ $book->title }}</td>
+
                     <td class="border p-2">{{ $book->authors->pluck('name')->join(' & ') }}</td>
-                    <td class="border p-2">{{ number_format($book->price) }}</td>
+
+                    <td class="border p-2">
+                        @if ($book->is_discounted)
+                            <div class="text-gray-500 line-through">{{ number_format($book->price) }}</div>
+                            <div class="text-red-600 font-semibold">{{ number_format($book->discounted_price) }}</div>
+                        @else
+                            {{ number_format($book->price) }}
+                        @endif
+                    </td>                    
                     <td class="border p-2">{{ $book->stock }}</td>
                     <td class="border p-2">{{ $book->category?->name ?? 'Không có danh mục' }}</td>
                     <td class="border p-2 space-x-2 ">
                         <div class="flex flex-row justify-center ">
                                 <!-- Sửa -->
-                            <a href="{{ route('admin.books.edit', $book) }}" class="text-blue-500 hover:text-blue-700 h-auto">
+                            <a href="{{ route('admin.books.edit', $book) }}" 
+                                onclick="return {{ $book->is_discounted ? 'confirm(\'Sách đang có khuyến mãi. Bạn vẫn muốn chỉnh sửa?\')' : 'true' }}"
+                                class="text-blue-500 hover:text-blue-700 h-auto">
                                 <svg xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 512 512"
                                     class="w-5 h-5 fill-current mx-1">
@@ -94,7 +105,7 @@
 
                             <!-- Xóa -->
                             <button type="button"
-                                    onclick="submitDelete('{{ route('admin.books.destroy', $book) }}')"
+                                    onclick="submitDelete('{{ route('admin.books.destroy', $book) }}', {{ $book->is_discounted ? 'true' : 'false' }})"
                                     class="text-red-500 hover:text-red-700">
                                 <svg xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 448 512"

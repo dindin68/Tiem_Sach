@@ -33,19 +33,35 @@ class Book extends Model
         return $this->hasMany(ImportItem::class);
     }
 
-    public function getDiscountedPriceAttribute()
+    public function promotions()
     {
-        $activePromotion = $this->promotions()
-            ->where('StartDate', '<=', now())
-            ->where('EndDate', '>=', now())
-            ->orderByDesc('DiscountPercentage')
-            ->first();
+        return $this->belongsToMany(Promotion::class, 'promotion_detail', 'book_id', 'promotion_id');
+    }
 
-        if ($activePromotion) {
-            return $this->price * (1 - $activePromotion->DiscountPercentage / 100);
+    public function getActivePromotionAttribute()
+    {
+        return $this->promotions
+            ->filter(function ($promotion) {
+                return now()->between($promotion->start_date, $promotion->end_date);
+            })
+            ->first(); // Lấy khuyến mãi đầu tiên còn hiệu lực
+    }
+
+    public function getDiscountedPriceAttribute()
+        {
+            $promotion = $this->active_promotion;
+
+            if ($promotion) {
+                return $this->price * (1 - $promotion->discount_percentage / 100);
+            }
+
+            return null;
         }
 
-        return $this->price;
+        // Có khuyến mãi không?
+    public function getIsDiscountedAttribute()
+    {
+        return $this->promotions()->exists();
     }
 
 
@@ -54,10 +70,7 @@ class Book extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    public function promotions()
-    {
-        return $this->belongsToMany(Promotion::class, 'promotion_detail', 'book_id', 'promotion_id');
-    }
+
 
     public function images(): HasMany
     {

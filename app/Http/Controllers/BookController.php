@@ -89,7 +89,6 @@ class BookController extends Controller
             'publisher' => 'required|string|max:255',
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
             'category_id' => 'required|exists:categories,id',
         ]);
 
@@ -98,7 +97,7 @@ class BookController extends Controller
             'title' => $request->title,
             'publisher' => $request->publisher,
             'price' => $request->price,
-            'stock' => $request->stock,
+            'stock' =>0,
             'category_id' => $request->category_id,
         ]);
 

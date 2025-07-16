@@ -26,6 +26,7 @@ Route::middleware('customer')->group(function () {
     Route::delete('/cart/{cartItem}', [CartController::class, 'destroy'])->name('cart.destroy');
     Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+    Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
 });
 
 Route::prefix('admin')->group(function () {

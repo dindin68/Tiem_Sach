@@ -1,12 +1,12 @@
 @extends('admin.layouts.app')
 @section('content')
-<div class="container mx-auto p-4">
-    <div class="flex justify-between items-center mt-4 bg-orange-50 border-l-4 border-green-800 rounded shadow">
-        <h2 class="text-lg pl-2 font-semibold text-brown-800">Danh Sách Sách</h2>
+<div class="container mx-auto px-4 py-2">
+    <div class="flex justify-between items-center bg-orange-50 border-l-4 border-green-800 rounded shadow">
+        <h2 class="text-lg pl-2 font-semibold text-brown-800">Quản lý Sách</h2>
 
         <a href="{{ route('admin.books.create') }}"
         class="bg-green-800 hover:bg-green-700 text-white px-4 py-2 m-2 rounded">
-            Thêm Sách Mới
+            Thêm Sách mới
         </a>
     </div>
 

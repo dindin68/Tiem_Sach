@@ -1,53 +1,62 @@
 @extends('admin.layouts.app')
 
 @section('content')
-<div class="container mx-auto px-4 py-6">
-    <h2 class="text-2xl font-bold mb-4 text-brown-800">Lịch sử khuyến mãi: {{ $history->first()->book_title ?? 'Không có dữ liệu' }}</h2>
+    <h2 class="text-xl font-semibold mb-4">Lịch sử khuyến mãi</h2>
 
-    <!-- Bộ lọc tìm kiếm -->
-    <form method="GET" action="" class="mb-4 flex items-center">
-        <input type="text" name="search" value="{{ request('search') }}" placeholder="Tìm theo tên sách..." 
-            class="border border-gray-300 rounded px-3 py-2 mr-2 focus:outline-none focus:ring focus:border-blue-400">
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Tìm</button>
+    <form method="GET" action="{{ route('admin.promotions.history') }}" class="mb-4 flex items-center gap-3 flex-wrap">
+        <select name="book_id" class="border px-3 py-2 rounded">
+            <option value="">-- Chọn sách --</option>
+            @foreach($books as $book)
+                <option value="{{ $book->id }}" {{ request('book_id') == $book->id ? 'selected' : '' }}>
+                    {{ $book->title }}
+                </option>
+            @endforeach
+        </select>
+
+        <input type="date" name="start_date" value="{{ request('start_date') }}" class="border px-3 py-2 rounded">
+        <input type="date" name="end_date" value="{{ request('end_date') }}" class="border px-3 py-2 rounded">
+
+        <button class="bg-blue-600 text-white px-4 py-2 rounded">Lọc</button>
+
+        <a href="{{ route('admin.promotions.history.export') }}" class="bg-green-600 text-white px-4 py-2 rounded">Xuất Excel</a>
     </form>
 
-    <!-- Bảng lịch sử -->
-    <div class="overflow-x-auto">
-        <table class="min-w-full bg-white border rounded shadow">
-            <thead class="bg-gray-100 text-gray-700">
+    <table class="table-auto w-full text-left border-collapse border">
+        <thead>
+            <tr>
+                <th class="border px-3 py-2">Sách</th>
+                <th class="border px-3 py-2">% Giảm</th>
+                <th class="border px-3 py-2">Từ</th>
+                <th class="border px-3 py-2">Đến</th>
+                <th class="border px-3 py-2">Ghi nhận</th>
+                <th class="border px-3 py-2">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse ($history as $item)
                 <tr>
-                    <th class="py-2 px-3 border">Mã KM</th>
-                    <th class="py-2 px-3 border">% Giảm</th>
-                    <th class="py-2 px-3 border">Bắt đầu</th>
-                    <th class="py-2 px-3 border">Kết thúc</th>
-                    <th class="py-2 px-3 border">Ghi nhận</th>
-                    <th class="py-2 px-3 border">Hành động</th>
+                    <td class="border px-3 py-2">{{ $item->book_title }}</td>
+                    <td class="border px-3 py-2">{{ $item->discount_percentage }}%</td>
+                    <td class="border px-3 py-2">{{ $item->start_date }}</td>
+                    <td class="border px-3 py-2">{{ $item->end_date }}</td>
+                    <td class="border px-3 py-2">{{ $item->created_at }}</td>
+                    <td class="border px-3 py-2">
+                        <form method="POST" action="{{ route('admin.promotions.history.delete', $item->history_id) }}" onsubmit="return confirm('Xoá dòng này?')">
+                            @csrf
+                            @method('DELETE')
+                            <button class="text-red-600 hover:underline">Xoá</button>
+                        </form>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @forelse ($history as $item)
-                    <tr class="hover:bg-gray-50">
-                        <td class="py-2 px-3 border text-center">{{ $item->promotion_id }}</td>
-                        <td class="py-2 px-3 border text-center">{{ $item->discount_percentage }}%</td>
-                        <td class="py-2 px-3 border text-center">{{ $item->start_date }}</td>
-                        <td class="py-2 px-3 border text-center">{{ $item->end_date }}</td>
-                        <td class="py-2 px-3 border text-center">{{ $item->created_at }}</td>
-                        <td class="py-2 px-3 border text-center">
-                            <form method="POST" action="{{ route('admin.promotions.history.delete', $item->history_id) }}"
-                                  onsubmit="return confirm('Xoá dòng này?')">
-                                @csrf
-                                @method('DELETE')
-                                <button class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 text-sm">Xoá</button>
-                            </form>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="6" class="text-center py-4 text-gray-500">Chưa có lịch sử</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+            @empty
+                <tr>
+                    <td colspan="6" class="text-center py-3">Không có dữ liệu phù hợp</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+
+    <div class="mt-4">
+        {{ $history->appends(request()->query())->links() }}
     </div>
-</div>
 @endsection

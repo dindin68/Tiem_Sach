@@ -2,28 +2,26 @@
 @extends('admin.layouts.app')
 
 @section('content')
-<div class="container mx-auto px-4 py-6">
-    <h2 class="text-2xl font-bold text-blue-600 mb-4">Quản lý khuyến mãi</h2>
+<div class="container mx-auto px-4 py-2">
 
-    @if (session('success'))
-        <div class="bg-green-100 text-green-700 p-3 rounded mb-4">
-            {{ session('success') }}
+    <div class="flex justify-between items-center bg-orange-50 border-l-4 border-green-800 rounded shadow mb-4">
+        <h2 class="text-lg pl-2 font-semibold text-brown-800">Quản lý khuyến mãi</h2>
+
+        <div class="flex items-center gap-2 mr-2">
+            <a href="{{ route('admin.promotions.history') }}"
+                class="flex items-center bg-brown-800 hover:bg-green-800 text-white px-2 py-2 rounded">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mx-2"viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                    <path fill="#ffffff" d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9L0 168c0 13.3 10.7 24 24 24l110.1 0c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24l0 104c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65 0-94.1c0-13.3-10.7-24-24-24z"/>
+                </svg>
+            </a>
+
+            <a href="{{ route('admin.books.create') }}"
+                class="bg-green-800 hover:bg-green-700 text-white px-4 py-2 rounded my-2">
+                Thêm khuyến mãi mới
+            </a>
         </div>
-    @endif
+    </div>
 
-    @if ($errors->any())
-        <div class="bg-red-100 text-red-700 p-3 rounded mb-4">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <a href="{{ route('admin.promotions.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block hover:bg-blue-600">
-        Thêm khuyến mãi
-    </a>
 
     <div class="overflow-x-auto">
         <table class="min-w-full border border-gray-300">

@@ -64,6 +64,7 @@ Route::prefix('admin')->group(function () {
             'update' => 'admin.categories.update',
             'destroy' => 'admin.categories.destroy',
         ]);
+        
 
         Route::resource('promotions', PromotionController::class)->names([
             'index' => 'admin.promotions.index',
@@ -74,9 +75,11 @@ Route::prefix('admin')->group(function () {
             'destroy' => 'admin.promotions.destroy',
         ]);
 
-        Route::get('/promotions/history', [PromotionController::class, 'showPromotionHistory'])->name('admin.promotions.history');
-        Route::delete('/promotions/history/{id}', [PromotionController::class, 'deleteHistory'])->name('admin.promotions.history.delete');
         Route::post('/promotions/apply', [PromotionController::class, 'applyToBooks'])->name('admin.promotions.apply');
+        Route::get('/history', [PromotionController::class, 'showPromotionHistory'])->name('admin.promotions.history');
+        Route::get('/history/export', [PromotionController::class, 'exportHistory'])->name('admin.promotions.history.export');
+        Route::delete('/promotions/history/{id}', [PromotionController::class, 'deletePromotionHistory'])->name('admin.promotions.history.delete');
+
 
         Route::get('/orders', [AdminController::class, 'orders'])->name('admin.orders.index');
         Route::put('/admin/orders/{order}', [AdminController::class, 'updateOrder'])->name('admin.orders.update');

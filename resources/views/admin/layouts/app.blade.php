@@ -19,6 +19,8 @@
 </head>
 <body x-data="{ navOpen: true }" class="flex min-h-screen">
 
+
+
     <!-- Sidebar -->
     <nav 
         x-show="navOpen"
@@ -47,9 +49,14 @@
         ☰
     </button>
 
+
     <!-- Nội dung chính -->
     <main class="flex-1 ml-0 md:ml-55 transition-all duration-300 ease-in-out">
+            {{-- Flash message và lỗi --}}
+        @include('components.message')
+        
         @yield('content')
+
     </main>
 
 </body>

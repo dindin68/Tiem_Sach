@@ -18,6 +18,9 @@
     <body class="font-sans antialiased">
         <div class="min-h-screen">
             @include('layouts.navigation')
+            
+            {{-- Flash message và lỗi --}}
+            @include('components.message')
 
             <!-- Page Heading -->
             <!-- @isset($header)

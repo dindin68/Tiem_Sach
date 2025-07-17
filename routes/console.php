@@ -33,6 +33,7 @@ Artisan::command('promotions:remove-expired', function () {
         //Xóa liên kết KM (sách về giá gốc)
         DB::table('promotion_detail')
             ->where('promotion_id', $promotion->id)->delete();
+        $promotion->delete();
     }
 
     $this->info('Đã xoá khuyến mãi hết hạn và lưu lịch sử.');

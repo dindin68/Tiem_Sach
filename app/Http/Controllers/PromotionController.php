@@ -104,24 +104,44 @@ class PromotionController extends Controller
     }
 
     // Hiển thị lịch sử khuyến mãi của một sách
-    public function showPromotionHistory()
+    public function showPromotionHistory(Request $request)
     {
-        $history = DB::table('promotion_history AS ph')
+        $query = DB::table('promotion_history AS ph')
             ->join('books AS b', 'ph.book_id', '=', 'b.id')
             ->leftJoin('promotions AS p', 'ph.promotion_id', '=', 'p.id')
             ->select(
                 'ph.id AS history_id',
                 'b.id AS book_id',
                 'b.title AS book_title',
-                'p.id AS promotion_id',
                 'ph.discount_percentage',
                 'ph.start_date',
-                'ph.end_date'
-            )
-            ->orderBy('ph.created_at', 'desc')
-            ->get();
+                'ph.end_date',
+                'ph.created_at',
+                'p.id AS promotion_id'
+            );
 
-        return view('admin.promotions.history', compact('history'));
+        if ($request->filled('book_id')) {
+            $query->where('ph.book_id', $request->book_id);
+        }
+
+        if ($request->filled('start_date')) {
+            $query->whereDate('ph.start_date', '>=', $request->start_date);
+        }
+
+        if ($request->filled('end_date')) {
+            $query->whereDate('ph.end_date', '<=', $request->end_date);
+        }
+
+        $history = $query->orderByDesc('ph.created_at')->paginate(10);
+        $books = Book::select('id', 'title')->get();
+
+        return view('admin.promotions.history', compact('history', 'books'));
+    }
+
+    public function deletePromotionHistory($id)
+    {
+        DB::table('promotion_history')->where('id', $id)->delete();
+        return redirect()->route('admin.promotions.history')->with('success', 'Xoá lịch sử khuyến mãi thành công!');
     }
 
 }

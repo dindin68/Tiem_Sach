@@ -19,6 +19,7 @@ class PromotionController extends Controller
         return view('admin.promotions.index', compact('promotions'));
     }
 
+
     // Form tạo khuyến mãi
     public function create()
     {
@@ -74,20 +75,44 @@ class PromotionController extends Controller
     public function update(Request $request, Promotion $promotion)
     {
         $request->validate([
-            'code' => 'required|string|max:50|unique:promotions,code,' . $promotion->id,
-            'name' => 'required|string|max:100',
-            'discount' => 'required|numeric|min:0|max:100',
+            'id' => 'required|string|max:550',
+            'discount_percentage' => [
+                'required',
+                'numeric',
+                'min:0',
+                'max:100',
+                function ($attribute, $value, $fail) use ($promotion) {
+                    // Kiểm tra có khuyến mãi khác đã dùng discount này chưa
+                    $exists = Promotion::where('discount_percentage', $value)
+                        ->where('id', '!=', $promotion->id) // bỏ qua chính nó
+                        ->exists();
+
+                    if ($exists) {
+                        $fail('Phần trăm giảm giá này đã được sử dụng cho một khuyến mãi khác.');
+                    }
+                },
+            ],
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'books' => 'nullable|array',
             'books.*' => 'exists:books,id',
         ]);
 
-        $promotion->update($request->only(['code', 'name', 'discount', 'start_date', 'end_date']));
-        $promotion->books()->sync($request->books ? array_fill_keys($request->books, ['discount' => $request->discount]) : []);
+        $promotion->update([
+            'id' => $request->id,
+            'name' => $request->name,
+            'discount_percentage' => $request->discount_percentage,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+        ]);
+
+        $promotion->books()->sync(
+            $request->books ?? []
+        );
 
         return redirect()->route('admin.promotions.index')->with('success', 'Cập nhật khuyến mãi thành công.');
     }
+
 
     public function destroy(Promotion $promotion)
     {
@@ -143,5 +168,7 @@ class PromotionController extends Controller
         DB::table('promotion_history')->where('id', $id)->delete();
         return redirect()->route('admin.promotions.history')->with('success', 'Xoá lịch sử khuyến mãi thành công!');
     }
+
+
 
 }

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('quantity');
             $table->decimal('import_price', 10, 2);
             $table->primary(['import_id', 'book_id']);
-            $table->foreign('import_id')->references('id')->on('import');
+            $table->foreign('import_id')->references('id')->on('imports');
             $table->foreign('book_id')->references('id')->on('books');
         });
     }

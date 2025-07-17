@@ -12,6 +12,8 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\ImportController;
+
 
 
 
@@ -80,7 +82,14 @@ Route::prefix('admin')->group(function () {
         Route::get('/history/export', [PromotionController::class, 'exportHistory'])->name('admin.promotions.history.export');
         Route::delete('/promotions/history/{id}', [PromotionController::class, 'deletePromotionHistory'])->name('admin.promotions.history.delete');
 
-
+        Route::resource('imports', ImportController::class)->names([
+            'index' => 'admin.imports.index',
+            'create' => 'admin.imports.create',
+            'store' => 'admin.imports.store',
+            'edit' => 'admin.imports.edit',
+            'update' => 'admin.imports.update',
+            'destroy' => 'admin.imports.destroy',
+        ]);
         Route::get('/orders', [AdminController::class, 'orders'])->name('admin.orders.index');
         Route::put('/admin/orders/{order}', [AdminController::class, 'updateOrder'])->name('admin.orders.update');
     });

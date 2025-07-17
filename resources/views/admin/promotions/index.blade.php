@@ -15,7 +15,7 @@
                 </svg>
             </a>
 
-            <a href="{{ route('admin.books.create') }}"
+            <a href="{{ route('admin.promotions.create') }}"
                 class="bg-green-800 hover:bg-green-700 text-white px-4 py-2 rounded my-2">
                 Thêm khuyến mãi mới
             </a>
@@ -24,22 +24,22 @@
 
 
     <div class="overflow-x-auto">
-        <table class="min-w-full border border-gray-300">
-            <thead class="bg-gray-200">
+        <table class="w-full mt-4 border-collapse text-center">
+            <thead class="sticky top-0 bg-gray-100 text-brown-800">
                 <tr>
-                    <th class="border px-4 py-2">Mã khuyến mãi</th>
-                    <th class="border px-4 py-2">Giảm giá (%)</th>
-                    <th class="border px-4 py-2">Ngày bắt đầu</th>
-                    <th class="border px-4 py-2">Ngày kết thúc</th>
-                    <th class="border px-4 py-2">Sách áp dụng</th>
-                    <th class="border px-4 py-2">Trạng thái</th>
-                    <th class="border px-4 py-2">Hành động</th>
+                    <th class="border">Mã KM</th>
+                    <th class="border">Giảm giá (%)</th>
+                    <th class="border">Ngày bắt đầu</th>
+                    <th class="border">Ngày kết thúc</th>
+                    <th class="border">Sách áp dụng</th>
+                    <th class="border">Trạng thái</th>
+                    <th class="border">Hành động</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse ($promotions as $promotion)
                     
-                    <tr class=" bg-gray-100">
+                    <tr >
                         <td class="border px-4 py-2">{{ $promotion->id }}</td>
                         <td class="border px-4 py-2">{{ $promotion->discount_percentage }}</td>
                         <td class="border px-4 py-2">{{ $promotion->start_date }}</td>

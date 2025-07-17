@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('authors', function (Blueprint $table) {
-            $table->string('id',8)->primary();
-            $table->string('name');
-            $table->string('photo')->nullable();
-            $table->string('infor')->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('authors')) {
+            Schema::create('authors', function (Blueprint $table) {
+                $table->string('id',8)->primary();
+                $table->string('name');
+                $table->string('photo')->nullable();
+                $table->string('infor')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
     /**

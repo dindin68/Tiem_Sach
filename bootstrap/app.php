@@ -10,6 +10,7 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
+
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'customer' => \App\Http\Middleware\EnsureUserIsCustomer::class,
@@ -17,6 +18,11 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
     })
+
+    ->withSchedule(function (Schedule $schedule) {
+    $schedule->command('promotions:remove-expired')->hourly();
+    })
+
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();

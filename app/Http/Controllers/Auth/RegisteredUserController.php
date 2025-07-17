@@ -32,13 +32,13 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255','regex:/^(?=.*[a-zA-Z])[a-zA-Z0-9\s]+$/'],//chỉ cho phép chữ, số, khoảng trắng (không ký tự đặc biệt) và có ít nhất một chữ cái
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         do {
-        $id = Str::upper(Str::random(8)); // hoặc thêm tiền tố 'CUS_' nếu thích
+        $id = Str::upper(Str::random(8));
         } while (Customer::where('id', $id)->exists());
 
         $user = Customer::create([

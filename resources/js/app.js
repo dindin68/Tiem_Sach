@@ -6,5 +6,5 @@ window.Alpine = Alpine;
 
 Alpine.start();
 
-import './book-actions';
+const modules = import.meta.glob('./admin/**/*.js', { eager: true });
 

@@ -19,6 +19,13 @@ class Import extends Model
 
     public function items(): HasMany
     {
-        return $this->hasMany(ImportItem::class);
+        return $this->hasMany(ImportItem::class,'import_id');
     }
+
+    protected $casts = [
+        'date' => 'datetime',
+        ];
+
+
+    public $timestamps = false;
 }

@@ -33,7 +33,7 @@
                         </td>
                         <td class="px-4 py-2 border">{{ $import->admin->name ?? 'Không rõ' }}</td>
                         <td class="px-4 py-2 border text-center">
-                            <a href="{{ route('import.show', $import->id) }}" class="text-blue-600 hover:underline">Chi tiết</a>
+                            <a href="{{ route('imports.show', $import->id) }}" class="text-blue-600 hover:underline">Chi tiết</a>
                         </td>
                     </tr>
                 @endforeach

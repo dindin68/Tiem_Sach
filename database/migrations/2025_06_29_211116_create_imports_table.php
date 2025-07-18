@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('imports', function (Blueprint $table) {
             $table->string('id', 50)->primary();
             $table->dateTime('date');
-            $table->string('provider', 100);
+            $table->string('provider', 100)->nullable();;
             $table->decimal('total_cost', 10, 2);
             $table->string('admin_id', 50)->nullable();
             $table->foreign('admin_id')->references('id')->on('admins');

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Book extends Model
 {
     public $incrementing = false;
+    protected $primaryKey = 'id';
     protected $keyType = 'string';
     protected $fillable = [
         'id', 'title', 'author_id', 'publisher',

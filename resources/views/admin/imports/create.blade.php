@@ -54,7 +54,7 @@
         <td><input type="number" name="books[__INDEX__][quantity]" value="1" class="qty border px-1 py-1 w-20 text-right"></td>
         <td><input type="number" name="books[__INDEX__][price]" value="0" class="price border px-1 py-1 w-28 text-right" step="0.01"></td>
         <td><span class="subtotal">0</span> đ</td>
-        <td><button type="button" onclick="this.closest('tr').remove(); updateTotal()">🗑️</button></td>
+        <td><button type="button" onclick="this.closest('tr').remove(); updateTotal()"></button></td>
     </tr>
 </template>
 

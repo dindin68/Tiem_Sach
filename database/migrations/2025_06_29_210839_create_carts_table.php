@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cart', function (Blueprint $table) {
-            $table->string('id')->primary();
+        Schema::create('carts', function (Blueprint $table) {
+            $table->string('id', 8)->primary();
             $table->decimal('total_cost', 10, 2);
             $table->timestamps();
         });

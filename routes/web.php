@@ -22,13 +22,14 @@ Route::get('/', [CustomerController::class, 'index'])->name('home'); // Trang ch
 Route::middleware('customer')->group(function () {
     Route::get('/index', [CustomerController::class, 'index'])->name('customer.index');
     Route::get('/books', [CustomerController::class, 'books'])->name('books');
+    Route::get('/books/category/{id}', [BookController::class, 'filterByCategory'])->name('books.byCategory');
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/add/{book}', [CartController::class, 'add'])->name('cart.add');
-    Route::put('/cart/{cartItem}', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/{cartItem}', [CartController::class, 'destroy'])->name('cart.destroy');
+    Route::post('/cart/update-quantity/{book_id}', [CartController::class, 'updateQuantity'])->name('cart.updateQuantity');
+    
     Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
-    Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
 });
 
 Route::prefix('admin')->group(function () {
@@ -89,7 +90,7 @@ Route::prefix('admin')->group(function () {
             'update' => 'admin.imports.update',
             'destroy' => 'admin.imports.destroy',
         ]);
-        Route::get('/admin/imports/{import}', [ImportController::class, 'show'])->name('imports.show');
+        Route::get('/admin/imports/{import}', [ImportController::class, 'show'])->name('admin.imports.show');
 
 
         Route::get('/orders', [AdminController::class, 'orders'])->name('admin.orders.index');

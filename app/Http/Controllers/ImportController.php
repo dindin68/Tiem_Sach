@@ -83,6 +83,27 @@ class ImportController extends Controller
         return view('admin.imports.show', compact('import'));
     }
 
+    public function destroy($id)
+    {
+        $import = Import::with('items')->findOrFail($id);
+
+        DB::transaction(function () use ($import) {
+            // Trừ lại stock sách đã nhập
+            foreach ($import->items as $item) {
+                Book::where('id', $item->book_id)->decrement('stock', $item->quantity);
+            }
+
+            // Xóa các dòng chi tiết
+            $import->items()->delete();
+
+            // Xóa phiếu nhập
+            $import->delete();
+        });
+
+        return redirect()->route('admin.imports.index')->with('success', 'Phiếu nhập đã được xóa.');
+    }
+
+
 
 
 }

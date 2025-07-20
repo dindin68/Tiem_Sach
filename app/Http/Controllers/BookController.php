@@ -18,19 +18,19 @@ class BookController extends Controller
     {
         $books = Book::with(['category', 'images'])->paginate(20);
         $promotions = Promotion::all();
-        return view('admin.books.index', compact('books','promotions'));
+        return view('admin.books.index', compact('books', 'promotions'));
     }
 
     public function create()
     {
         $categories = Category::all();
         $authors = Author::all();
-        return view('admin.books.create', compact('categories','authors'));
+        return view('admin.books.create', compact('categories', 'authors'));
     }
 
     public function store(Request $request)
-    {   
-        
+    {
+
         $request->validate([
             'id' => 'required|string|unique:books,id|max:255',
             'title' => 'required|string|max:255',
@@ -41,20 +41,20 @@ class BookController extends Controller
             'price' => 'required|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
         ]);
-        
+
         $book = Book::create([
             'id' => $request->id,
             'title' => $request->title,
             'publisher' => $request->publisher,
             'price' => $request->price,
             'stock' => 0,
-            'imported' =>0,
+            'imported' => 0,
             'sold' => 0,
             'category_id' => $request->category_id,
         ]);
-        
+
         $book->authors()->attach($request->author_ids);
-        
+
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
                 $path = $image->store('books', 'public');
@@ -76,7 +76,7 @@ class BookController extends Controller
         $authors = Author::all();
         $book->load('images');
         $bookAuthorIds = $book->authors->pluck('id')->toArray();
-        return view('admin.books.edit', compact('book', 'categories','authors', 'bookAuthorIds'));
+        return view('admin.books.edit', compact('book', 'categories', 'authors', 'bookAuthorIds'));
     }
 
 
@@ -97,7 +97,7 @@ class BookController extends Controller
             'title' => $request->title,
             'publisher' => $request->publisher,
             'price' => $request->price,
-            'stock' =>0,
+            'stock' => 0,
             'category_id' => $request->category_id,
         ]);
 
@@ -133,5 +133,21 @@ class BookController extends Controller
         return redirect()->route('admin.books.index')->with('success', 'Xóa sách thành công.');
     }
 
+    public function filterByCategory($id)
+    {
+        // Lấy thể loại
+        $category = Category::findOrFail($id);
+
+        // Lấy sách thuộc thể loại đó, có phân trang
+        $books = Book::where('category_id', $id)->paginate(12);
+
+        // Trả về view, kèm dữ liệu
+        return view('books.index', [
+            'books' => $books,
+            'selectedCategory' => $category
+        ]);
+    }
+
     
-}   
+
+}

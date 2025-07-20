@@ -6,5 +6,8 @@ window.Alpine = Alpine;
 
 Alpine.start();
 
-const modules = import.meta.glob('./admin/**/*.js', { eager: true });
+if (window.location.pathname.startsWith('/admin')) {
+    import.meta.glob('./admin/**/*.js', { eager: true });
+}
+import './customer/cart.js';
 

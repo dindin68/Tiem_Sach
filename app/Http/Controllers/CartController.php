@@ -123,7 +123,4 @@ class CartController extends Controller
         return redirect()->back()->with('success', 'Sản phẩm đã được xóa khỏi giỏ hàng.');
     }
 
-
-
-
 }

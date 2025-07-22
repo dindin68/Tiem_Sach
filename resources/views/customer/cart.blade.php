@@ -54,11 +54,19 @@
                             <td class="px-4 py-3" id="total-amount">
                                 {{ number_format($items->sum(fn($i) => $i->amount)) }}₫
                             </td>
-                            <td></td>
                         </tr>
                     </tfoot>
                 </table>
             </div>
+            
+            <div class="mt-6 text-right">
+                <form action="{{ route('checkout.index') }}" method="GET">
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">
+                        Thanh toán
+                    </button>
+                </form>
+            </div>
+
         @endif
     </div>
 @endsection

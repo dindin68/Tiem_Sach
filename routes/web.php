@@ -13,6 +13,7 @@ use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\ImportController;
+use App\Http\Controllers\CheckoutController;
 
 
 
@@ -23,11 +24,20 @@ Route::middleware('customer')->group(function () {
     Route::get('/index', [CustomerController::class, 'index'])->name('customer.index');
     Route::get('/books', [CustomerController::class, 'books'])->name('books');
     Route::get('/books/category/{id}', [BookController::class, 'filterByCategory'])->name('books.byCategory');
+    //cart
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/add/{book}', [CartController::class, 'add'])->name('cart.add');
     Route::delete('/cart/{cartItem}', [CartController::class, 'destroy'])->name('cart.destroy');
     Route::post('/cart/update-quantity/{book_id}', [CartController::class, 'updateQuantity'])->name('cart.updateQuantity');
+
+    Route::post('/buy-now', [CheckoutController::class, 'buyNow'])->name('checkout.buy-now');
     
+    //checkout
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
+    Route::get('/checkout/show', [CheckoutController::class, 'show'])->name('checkout.show');
+
+
     Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 });

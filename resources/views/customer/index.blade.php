@@ -1,17 +1,28 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto px-4 py-6">
+<div class="container mx-auto px-4 py-6 space-y-10">
 
-    <div class="w-full mb-8 h-auto">
+    {{-- Carousel --}}
+    <div class="w-full h-auto rounded-2xl overflow-hidden shadow-xl">
         <x-carousel />
     </div>
 
-    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Sách mới phát hành</h2>
-    <x-book-grid :books="$newBooks" />
+    {{-- Sách mới phát hành --}}
+    @if($newBooks->count())
+        <div class="animate-fade-in">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Sách mới phát hành</h2>
+            <x-book-grid :books="$newBooks" />
+        </div>
+    @endif
 
-    <h2 class="text-2xl font-semibold text-gray-800 mb-4 mt-8">Sách đang khuyến mãi</h2>
-    <x-book-grid :books="$discountedBooks" />
+    {{-- Sách đang khuyến mãi --}}
+    @if($discountedBooks->count())
+        <div class="animate-fade-in">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4 mt-8">Sách đang khuyến mãi</h2>
+            <x-book-grid :books="$discountedBooks" />
+        </div>
+    @endif
 
 </div>
 @endsection

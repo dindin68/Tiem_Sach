@@ -21,27 +21,57 @@ class OrderController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $cart = session()->get('cart', []);
-        if (empty($cart)) {
-            return redirect()->route('cart.index')->with('error', 'Giỏ hàng trống.');
-        }
+{
+    $buyNow = session()->get('buy_now');
+    $cart = session()->get('cart');
 
-        $totalCost = 0;
+    if ($buyNow) {
+        // ==== MUA NGAY ====
+        $book = Book::findOrFail($buyNow['book_id']);
+        $quantity = $buyNow['quantity'];
+        $price = $buyNow['price'];
+        $total = $price * $quantity;
+
+        $order = Order::create([
+            'id' => Str::uuid(),
+            'customer_id' => Auth::id(),
+            'total_cost' => $total,
+            'status' => 'pending',
+        ]);
+
+        OrderItem::create([
+            'id' => Str::uuid(),
+            'order_id' => $order->id,
+            'book_id' => $book->id,
+            'quantity' => $quantity,
+            'price' => $price,
+        ]);
+
+        // Cập nhật sách
+        $book->update([
+            'stock' => $book->stock - $quantity,
+            'sold' => $book->sold + $quantity,
+        ]);
+
+        session()->forget('buy_now');
+
+    } elseif ($cart) {
+        // ==== GIỎ HÀNG ====
+        $total = 0;
         foreach ($cart as $item) {
-            $totalCost += $item['price'] * $item['quantity'];
+            $total += $item['price'] * $item['quantity'];
         }
 
         $order = Order::create([
-            'id' => Str::uuid()->toString(),
-            'customer_id' => Auth::guard('web')->id(),
-            'total_cost' => $totalCost,
+            'id' => Str::uuid(),
+            'customer_id' => Auth::id(),
+            'total_cost' => $total,
             'status' => 'pending',
         ]);
 
         foreach ($cart as $bookId => $item) {
             OrderItem::create([
-                'id' => Str::uuid()->toString(),
+                'id' => Str::uuid(),
                 'order_id' => $order->id,
                 'book_id' => $bookId,
                 'quantity' => $item['quantity'],
@@ -56,6 +86,11 @@ class OrderController extends Controller
         }
 
         session()->forget('cart');
-        return redirect()->route('dashboard')->with('success', 'Đặt hàng thành công.');
+
+    } else {
+        return redirect()->back()->with('error', 'Không có sản phẩm để thanh toán.');
     }
+
+    return redirect()->route('dashboard')->with('success', 'Thanh toán thành công!');
+}
 }

@@ -8,18 +8,33 @@ use App\Models\Promotion;
 use App\Models\Image;
 use App\Models\Category;
 use App\Models\Author;
+use App\Models\ImportItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
-    public function index()
-    {
-        $books = Book::with(['category', 'images'])->paginate(20);
-        $promotions = Promotion::all();
-        return view('admin.books.index', compact('books', 'promotions'));
+    public function index(Request $request)
+{
+    $query = Book::with(['category', 'images', 'authors']);
+
+    if ($search = $request->input('search')) {
+        $query->where(function ($q) use ($search) {
+            $q->where('title', 'like', "%{$search}%")
+              ->orWhere('id', 'like', "%{$search}%")
+              ->orWhereHas('authors', function ($subQuery) use ($search) {
+                  $subQuery->where('name', 'like', "%{$search}%");
+              });
+        });
     }
+
+    $books = $query->paginate(20);
+    $promotions = Promotion::all();
+
+    return view('admin.books.index', compact('books', 'promotions'));
+}
+
 
     public function create()
     {
@@ -148,6 +163,18 @@ class BookController extends Controller
         ]);
     }
 
-    
+    public function show(Book $book)
+    {
+        $book->load(['authors', 'images', 'category']);
+        // Lấy lịch sử nhập hàng của sách này (join bảng imports để lấy ngày nhập)
+        $importHistory = ImportItem::with('import')
+            ->where('book_id', $book->id)
+            ->orderByDesc('created_at')
+            ->get();
+
+        return view('admin.books.show', compact('book', 'importHistory'));
+    }
+
+
 
 }

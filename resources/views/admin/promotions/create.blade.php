@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 @section('content')
 <div class="container mx-auto p-4 max-w-md">
-    <h1 class="text-2xl font-bold text-blue-600 mb-4">Thêm khuyến mãi</h1>
+    <h1 class="text-2xl font-bold text-green-800 mb-4">Thêm khuyến mãi</h1>
     <form method="POST" action="{{ route('admin.promotions.store') }}">
         @csrf
         <div class="mb-4">
@@ -32,7 +32,7 @@
                 <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
             @enderror
         </div>
-        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Thêm khuyến mãi</button>
+        <button type="submit" class="bg-green-800 text-white px-4 py-2 rounded hover:bg-blue-600">Thêm khuyến mãi</button>
     </form>
 </div>
 @endsection

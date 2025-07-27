@@ -13,11 +13,22 @@ use Carbon\Carbon;
 class PromotionController extends Controller
 {
     // Hiển thị danh sách khuyến mãi
-    public function index()
+    public function index(Request $request)
     {
-        $promotions = Promotion::paginate(8);
+        $query = Promotion::query();
+
+        if ($search = $request->input('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('id', 'like', "%{$search}%")
+                    ->orWhere('discount_percentage', 'like', "%{$search}%");
+            });
+        }
+
+        $promotions = $query->orderByDesc('created_at')->paginate(10);
+
         return view('admin.promotions.index', compact('promotions'));
     }
+
 
     // Form tạo khuyến mãi
     public function create()
@@ -72,7 +83,10 @@ class PromotionController extends Controller
     {
         $request->validate([
             'discount_percentage' => [
-                'required', 'numeric', 'min:0', 'max:100',
+                'required',
+                'numeric',
+                'min:0',
+                'max:100',
                 function ($attribute, $value, $fail) use ($promotion) {
                     $exists = Promotion::where('discount_percentage', $value)
                         ->where('id', '!=', $promotion->id)
@@ -114,18 +128,18 @@ class PromotionController extends Controller
     public function showPromotionHistory(Request $request)
     {
         $query = DB::table('promotion_history AS ph')
-        ->join('books AS b', 'ph.book_id', '=', 'b.id')
-        ->leftJoin('promotions AS p', 'ph.promotion_id', '=', 'p.id')
-        ->select(
-            'ph.id AS history_id',
-            'b.id AS book_id',
-            'b.title AS book_title',
-            'ph.promotion_id',
-            'ph.discount_percentage',
-            'ph.start_date',
-            'ph.end_date',
-            'ph.created_at'
-        );
+            ->join('books AS b', 'ph.book_id', '=', 'b.id')
+            ->leftJoin('promotions AS p', 'ph.promotion_id', '=', 'p.id')
+            ->select(
+                'ph.id AS history_id',
+                'b.id AS book_id',
+                'b.title AS book_title',
+                'ph.promotion_id',
+                'ph.discount_percentage',
+                'ph.start_date',
+                'ph.end_date',
+                'ph.created_at'
+            );
 
         if ($request->filled('book_id')) {
             $query->where('ph.book_id', $request->book_id);

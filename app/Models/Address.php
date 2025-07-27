@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Address extends Model
 {
-    public $incrementing = false;
-    protected $keyType = 'string';
+    public $incrementing = true;
+    protected $keyType = 'int';
     protected $fillable = [
         'id', 'customer_id', 'phone',
         'recipient_name', 'house_number', 'ward', 'district', 'city'
@@ -18,4 +18,5 @@ class Address extends Model
     {
         return $this->belongsTo(Customer::class);
     }
+    public $timestamps = false;
 }

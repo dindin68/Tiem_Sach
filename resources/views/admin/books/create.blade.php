@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container mx-auto px-4 md:px-6 py-6 max-w-4xl mt-2 bg-white shadow rounded-xl">
-    <h1 class="text-3xl font-bold text-blue-700 mb-8 text-center"> Thêm Sách Mới</h1>
+    <h1 class="text-3xl font-bold text-green-700 mb-8 text-center"> Thêm Sách Mới</h1>
 
     <form method="POST" action="{{ route('admin.books.store') }}" enctype="multipart/form-data" class="space-y-6">
         @csrf
@@ -73,7 +73,7 @@
             <div class="md:col-span-2">
                 <label for="images" class="block text-sm font-medium text-gray-700">Hình ảnh</label>
                 <input type="file" name="images[]" id="images" multiple
-                       class="mt-1 w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                       class="w-full px-3 py-2 border rounded file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-green-100 file:text-green-800 hover:file:bg-green-200">
                 @error('images') <div class="text-red-500 text-xs mt-1">{{ $message }}</div> @enderror
                 @error('images.*') <div class="text-red-500 text-xs mt-1">{{ $message }}</div> @enderror
             </div>
@@ -81,7 +81,7 @@
 
         <div class="text-center">
             <button type="submit"
-                    class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-lg transition">
+                    class="inline-flex items-center bg-green-800 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-lg transition">
                  Thêm sách
             </button>
         </div>

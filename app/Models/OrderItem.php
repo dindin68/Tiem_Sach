@@ -9,7 +9,7 @@ class OrderItem extends Model
 {
     public $incrementing = false;
     public $timestamps = false;
-    protected $fillable = ['order_id', 'book_id', 'unit_price', 'quantity', 'amount', 'notice'];
+    protected $fillable = ['order_id', 'book_id','book_title' ,'unit_price', 'quantity', 'amount', 'notice'];
 
     public function order(): BelongsTo
     {

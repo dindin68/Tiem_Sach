@@ -11,29 +11,19 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
-        return view('admin.dashboard');
-    }
-    public function books()
-    {
-        $books = Book::with('category')->paginate(12);
-        return view('admin.books.index', compact('books'));
-    }
+        $totalBooks = Book::count();
+        $totalOrders = Order::count();
+        $revenueToday = Order::whereDate('date_order', today())->sum('total_cost');
+        $pendingOrders = Order::where('status', '!=', 'Hoàn thành')->count();
+        $recentOrders = Order::with('customer')->latest('date_order')->take(5)->get();
 
-    public function orders()
-    {
-        $orders = Order::with('customer', 'items.book')->paginate(12);
-        return view('admin.orders.index', compact('orders'));
+        return view('admin.dashboard', compact(
+            'totalBooks',
+            'totalOrders',
+            'revenueToday',
+            'pendingOrders',
+            'recentOrders'
+        ));
     }
-
-    public function promotions()
-    {
-        $books = Promotion::with('category')->paginate(12);
-        return view('admin.promotion.index', compact('promotions'));
-    }
-    public function updateOrder(Request $request, Order $order)
-    {
-        $request->validate(['status' => 'required|in:pending,completed,cancelled']);
-        $order->update(['status' => $request->status]);
-        return redirect()->route('admin.orders.index')->with('success', 'Cập nhật trạng thái thành công.');
-    }
+    
 }

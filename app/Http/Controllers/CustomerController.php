@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\Cart;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 
 class CustomerController extends Controller
 {
@@ -49,17 +52,30 @@ class CustomerController extends Controller
                 return $book;
             });
 
+        $popularBooks = Book::select(
+            'books.id',
+            'books.title',
+            'books.price',
+            DB::raw('SUM(order_items.quantity) as total_sold')
+        )
+            ->join('order_items', 'books.id', '=', 'order_items.book_id')
+            ->groupBy('books.id', 'books.title', 'books.price')
+            ->orderByDesc('total_sold')
+            ->with(['promotions', 'images', 'authors'])
+            ->take(10)
+            ->get()
+            ->map(function ($book) {
+                $book->discounted_price = $this->getDiscountedPrice($book);
+                return $book;
+            });
+
+
         $cartItemCount = $this->getCartItemCount();
 
-        return view('customer.index', compact('cartItemCount', 'newBooks', 'discountedBooks'));
+        return view('customer.index', compact('cartItemCount', 'newBooks', 'discountedBooks', 'popularBooks'));
     }
 
-    public function books()
-    {
-        $books = Book::with('category', 'images')->paginate(12);
-        $cartItemCount = $this->getCartItemCount();
-        return view('customer.books.index', compact('books', 'cartItemCount'));
-    }
+
 
     protected function getDiscountedPrice($book)
     {
@@ -72,7 +88,7 @@ class CustomerController extends Controller
             return round($book->price * (1 - $promotion->discount_percentage / 100));
         }
 
-        return null; // không có khuyến mãi
+        return null;
     }
 
 }

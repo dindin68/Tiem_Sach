@@ -12,13 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->string('id', 50)->primary();
+            $table->id();
             $table->string('customer_id', 50);
             $table->dateTime('date_order');
             $table->string('status', 50);
             $table->decimal('shipping_fee', 10, 2);
             $table->decimal('total_cost', 10, 2);
             $table->text('notice')->nullable();
+           $table->foreignId('address_id')->constrained('addresses')->onDelete('cascade');
             $table->foreign('customer_id')->references('id')->on('customers');
         });
     }
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('order');
+        Schema::dropIfExists('orders');
     }
 };

@@ -15,7 +15,7 @@ class Author extends Model
     protected $fillable = ['id','name','photo','infor'];
     public function books()
     {
-        return $this->belongsToMany(Book::class,'author_book','book_id','author_id');
+        return $this->belongsToMany(Book::class,'author_book','author_id','book_id');
     }
 
 

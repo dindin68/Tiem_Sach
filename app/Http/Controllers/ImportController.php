@@ -45,9 +45,11 @@ class ImportController extends Controller
             // Gộp các dòng trùng book_id
             $items = collect($request->books)
                 ->groupBy('book_id')
-                ->map(function ($group) {
+                ->map(function ($group, $bookId) {
+                    $book = Book::find($bookId);
                     return [
                         'book_id' => $group[0]['book_id'],
+                        'book_title' => $book->title,
                         'quantity' => $group->sum('quantity'),
                         'import_price' => $group->last()['price'], // Lấy giá cuối cùng
                     ];
@@ -70,8 +72,12 @@ class ImportController extends Controller
 
             // Cập nhật số lượng sách trong kho
             foreach ($items as $item) {
-                Book::where('id', $item['book_id'])->increment('stock', $item['quantity']);
+                $book = Book::find($item['book_id']);
+                $book->imported += $item['quantity'];
+                $book->stock = $book->imported - $book->sold;
+                $book->save();
             }
+
         });
 
         return redirect()->route('admin.imports.create')->with('success', 'Phiếu nhập đã được lưu.');

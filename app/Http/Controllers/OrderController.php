@@ -2,95 +2,66 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Book;
 use App\Models\Order;
-use App\Models\OrderItem;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class OrderController extends Controller
 {
-    public function create()
+    public function index(Request $request)
     {
-        $cart = session()->get('cart', []);
-        if (empty($cart)) {
-            return redirect()->route('cart.index')->with('error', 'Giỏ hàng trống.');
+        $query = Order::with(['customer', 'paymentMethod']);
+
+        // Lọc theo trạng thái
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
         }
-        return view('orders.create', compact('cart'));
+
+        // Lọc theo ngày đặt hàng (theo khoảng)
+        if ($request->filled('date_from')) {
+            $query->whereDate('date_order', '>=', $request->date_from);
+        }
+
+        if ($request->filled('date_to')) {
+            $query->whereDate('date_order', '<=', $request->date_to);
+        }
+
+        $orders = $query->orderByDesc('date_order')->paginate(10);
+        $statusColors = [
+            'đang chuẩn bị' => 'bg-yellow-100 text-yellow-800',
+            'đang vận chuyển' => 'bg-blue-100 text-blue-800',
+            'hoàn thành' => 'bg-green-100 text-green-800',
+            'hoàn trả' => 'bg-red-100 text-red-800',
+        ];
+
+        // Gắn màu tương ứng vào từng đơn hàng
+        $orders->setCollection(
+            $orders->getCollection()->transform(function ($order) use ($statusColors) {
+                $statusKey = strtolower($order->status);
+                $order->status_color = $statusColors[$statusKey] ?? 'bg-gray-100 text-gray-700';
+                return $order;
+            })
+        );
+
+        return view('admin.orders.index', compact('orders'));
     }
 
-    public function store(Request $request)
-{
-    $buyNow = session()->get('buy_now');
-    $cart = session()->get('cart');
 
-    if ($buyNow) {
-        // ==== MUA NGAY ====
-        $book = Book::findOrFail($buyNow['book_id']);
-        $quantity = $buyNow['quantity'];
-        $price = $buyNow['price'];
-        $total = $price * $quantity;
-
-        $order = Order::create([
-            'id' => Str::uuid(),
-            'customer_id' => Auth::id(),
-            'total_cost' => $total,
-            'status' => 'pending',
-        ]);
-
-        OrderItem::create([
-            'id' => Str::uuid(),
-            'order_id' => $order->id,
-            'book_id' => $book->id,
-            'quantity' => $quantity,
-            'price' => $price,
-        ]);
-
-        // Cập nhật sách
-        $book->update([
-            'stock' => $book->stock - $quantity,
-            'sold' => $book->sold + $quantity,
-        ]);
-
-        session()->forget('buy_now');
-
-    } elseif ($cart) {
-        // ==== GIỎ HÀNG ====
-        $total = 0;
-        foreach ($cart as $item) {
-            $total += $item['price'] * $item['quantity'];
-        }
-
-        $order = Order::create([
-            'id' => Str::uuid(),
-            'customer_id' => Auth::id(),
-            'total_cost' => $total,
-            'status' => 'pending',
-        ]);
-
-        foreach ($cart as $bookId => $item) {
-            OrderItem::create([
-                'id' => Str::uuid(),
-                'order_id' => $order->id,
-                'book_id' => $bookId,
-                'quantity' => $item['quantity'],
-                'price' => $item['price'],
-            ]);
-
-            $book = Book::find($bookId);
-            $book->update([
-                'stock' => $book->stock - $item['quantity'],
-                'sold' => $book->sold + $item['quantity'],
-            ]);
-        }
-
-        session()->forget('cart');
-
-    } else {
-        return redirect()->back()->with('error', 'Không có sản phẩm để thanh toán.');
+    // Chi tiết đơn hàng
+    public function show($id)
+    {
+        $order = Order::with(['items.book', 'customer'])->findOrFail($id);
+        $total = $order->items->sum('amount');
+        return view('admin.orders.show', compact('total', 'order'));
     }
 
-    return redirect()->route('dashboard')->with('success', 'Thanh toán thành công!');
-}
+    public function updateStatus(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
+        $order->status = $request->input('status');
+        $order->save();
+
+        return redirect()->back()->with('success', 'Đã cập nhật trạng thái đơn hàng.');
+    }
+
 }

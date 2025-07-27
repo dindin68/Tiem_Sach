@@ -17,16 +17,23 @@ class Customer extends Authenticatable
 
     public function orders(): HasMany
     {
-        return $this->hasMany(Order::class,'customer_id');
+        return $this->hasMany(Order::class, 'customer_id');
     }
 
     public function addresses(): HasMany
     {
-        return $this->hasMany(Address::class,'customer_id');
+        return $this->hasMany(Address::class, 'customer_id');
     }
 
     public function reviews(): HasMany
     {
-        return $this->hasMany(Review::class,'customer_id');
+        return $this->hasMany(Review::class, 'customer_id');
     }
+
+
+    public function defaultAddress()
+    {
+        return $this->hasOne(Address::class)->where('is_default', true);
+    }
+
 }

@@ -14,6 +14,11 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\Cus_SearchController;
+use App\Http\Controllers\Cus_AuthorController;
+use App\Http\Controllers\Cus_BookshelfController;
+use App\Http\Controllers\Cus_OrderController;
+use \App\Http\Controllers\RevenueController;
 
 
 
@@ -22,8 +27,15 @@ Route::get('/', [CustomerController::class, 'index'])->name('home'); // Trang ch
 
 Route::middleware('customer')->group(function () {
     Route::get('/index', [CustomerController::class, 'index'])->name('customer.index');
-    Route::get('/books', [CustomerController::class, 'books'])->name('books');
-    Route::get('/books/category/{id}', [BookController::class, 'filterByCategory'])->name('books.byCategory');
+    Route::get('/search', [Cus_SearchController::class, 'index'])->name('customer.search');
+
+    Route::get('/authors', [Cus_AuthorController::class, 'index'])->name('authors');
+    Route::get('/authors/{id}', [Cus_AuthorController::class, 'show'])->name('customer.authors_show');
+
+    Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
+    //bookshelf
+    Route::get('/bookshelf', [Cus_BookshelfController::class, 'index'])->name('customer.bookshelf');
+    Route::get('/books/category/{id}', [Cus_BookshelfController::class, 'filterByCategory'])->name('customer.bookshelf.byCategory');
     //cart
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/add/{book}', [CartController::class, 'add'])->name('cart.add');
@@ -31,15 +43,19 @@ Route::middleware('customer')->group(function () {
     Route::post('/cart/update-quantity/{book_id}', [CartController::class, 'updateQuantity'])->name('cart.updateQuantity');
 
     Route::post('/buy-now', [CheckoutController::class, 'buyNow'])->name('checkout.buy-now');
-    
+
     //checkout
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('customer.checkout');
     Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
-    Route::get('/checkout/show', [CheckoutController::class, 'show'])->name('checkout.show');
+    Route::post('/checkout/shipping', [CheckoutController::class, 'calculateShipping'])->name('checkout.shipping');
+
 
 
     Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+    Route::get('/orders', [Cus_OrderController::class, 'index'])->name('customer.orders');
+    Route::get('/orders/{id}', [Cus_OrderController::class, 'show'])->name('customer.orders_show');
 });
 
 Route::prefix('admin')->group(function () {
@@ -59,6 +75,8 @@ Route::prefix('admin')->group(function () {
             'update' => 'admin.books.update',
             'destroy' => 'admin.books.destroy',
         ]);
+        Route::get('/admin/books/{book}', [BookController::class, 'show'])->name('admin.books.show');
+
 
         Route::resource('authors', AuthorController::class)->names([
             'index' => 'admin.authors.index',
@@ -77,7 +95,7 @@ Route::prefix('admin')->group(function () {
             'update' => 'admin.categories.update',
             'destroy' => 'admin.categories.destroy',
         ]);
-        
+
 
         Route::resource('promotions', PromotionController::class)->names([
             'index' => 'admin.promotions.index',
@@ -101,10 +119,13 @@ Route::prefix('admin')->group(function () {
             'destroy' => 'admin.imports.destroy',
         ]);
         Route::get('/admin/imports/{import}', [ImportController::class, 'show'])->name('admin.imports.show');
+        Route::get('/admin/revenue', [RevenueController::class, 'index'])->name('admin.revenue.index')->middleware('admin');
 
 
-        Route::get('/orders', [AdminController::class, 'orders'])->name('admin.orders.index');
-        Route::put('/admin/orders/{order}', [AdminController::class, 'updateOrder'])->name('admin.orders.update');
+        Route::get('/orders', [OrderController::class, 'index'])->name('admin.orders.index');
+        Route::get('/orders/{id}', [OrderController::class, 'show'])->name('admin.orders.show');
+        Route::put('/admin/orders/{id}/update-status', [OrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
+
     });
 });
 
@@ -121,4 +142,4 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
 Route::post('/register', [RegisteredUserController::class, 'store']);
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

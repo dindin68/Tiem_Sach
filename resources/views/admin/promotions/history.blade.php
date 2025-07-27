@@ -16,9 +16,8 @@
         <input type="date" name="start_date" value="{{ request('start_date') }}" class="border px-3 py-2 rounded">
         <input type="date" name="end_date" value="{{ request('end_date') }}" class="border px-3 py-2 rounded">
 
-        <button class="bg-blue-600 text-white px-4 py-2 rounded">Lọc</button>
+        <button class="bg-green-700 text-white px-4 py-2 rounded">Lọc</button>
 
-        <a href="{{ route('admin.promotions.history.export') }}" class="bg-green-600 text-white px-4 py-2 rounded">Xuất Excel</a>
     </form>
 
     <table class="table-auto w-full text-left border-collapse border">

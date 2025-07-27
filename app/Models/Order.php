@@ -8,9 +8,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Order extends Model
 {
-    public $incrementing = false;
-    protected $keyType = 'string';
-    protected $fillable = ['id', 'customer_id', 'date_order', 'status', 'shipping_fee', 'total_cost', 'notice'];
+    public $incrementing = true;
+    protected $keyType = 'int';
+    protected $fillable = ['id', 'customer_id', 'address_id', 'date_order', 'status', 'payment_method_id', 'shipping_fee', 'total_cost', 'notice'];
+
+    public const UPDATED_AT = null;
+
+    public const CREATED_AT = 'date_order';
+    protected $casts = [
+        'date_order' => 'datetime',
+    ];
 
     public function customer(): BelongsTo
     {
@@ -21,4 +28,12 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
+    public function paymentMethod()
+    {
+        return $this->belongsTo(\App\Models\PaymentMethod::class, 'payment_method_id', 'id');
+    }
+
+
+
 }

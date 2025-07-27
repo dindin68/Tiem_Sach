@@ -60,7 +60,7 @@
             </div>
             
             <div class="mt-6 text-right">
-                <form action="{{ route('checkout.index') }}" method="GET">
+                <form action="{{ route('customer.checkout') }}" method="GET">
                     <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">
                         Thanh toán
                     </button>

@@ -5,15 +5,15 @@
         <h2 class="text-xl font-semibold mb-4">Kết quả tìm kiếm cho: "{{ $query }}"</h2>
 
         {{-- Kết quả sách --}}
-        @if($books->count())
+        @if($type === 'book' && $books->count())
             <h3 class="text-lg font-bold mt-6 mb-2">Sách</h3>
             <x-book-grid :books="$books" />
-        @else
+        @elseif($type === 'book' && $books->isEmpty())
             <p class="text-center text-gray-500 mt-4">Không tìm thấy sách phù hợp.</p>
         @endif
 
         {{-- Kết quả tác giả --}}
-        @if ($authors->count())
+        @if ($type === 'author' && $authors->count())
             <h3 class="text-lg font-bold mt-8 mb-4">Tác giả</h3>
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                 @foreach($authors as $author)
@@ -36,10 +36,13 @@
 
                 @endforeach
             </div>
+        @elseif ($type === 'author' && $authors->isEmpty())
+            <p class="text-center text-gray-500 mt-4">Không tìm thấy tác giả phù hợp.</p>
         @endif
 
+
         {{-- Nếu không có gì --}}
-        @if ($books->isEmpty() && $authors->isEmpty())
+        @if ($type === 'none')
             <p class="italic text-gray-500">Không tìm thấy kết quả phù hợp.</p>
         @endif
     </div>

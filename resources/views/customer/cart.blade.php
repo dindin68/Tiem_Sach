@@ -2,7 +2,6 @@
 
 @section('content')
     <div class="container mx-auto px-4 py-8">
-        <h1 class="text-2xl font-bold mb-6">🛒 Giỏ hàng</h1>
 
         @if($items->isEmpty())
             <p class="text-gray-600">Chưa có sản phẩm nào trong giỏ hàng.</p>
@@ -41,7 +40,7 @@
                                     <form action="{{ route('cart.destroy', $item->id) }}" method="POST" style="display:inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" onclick="return confirm('Xóa sản phẩm này?')">Xóa</button>
+                                        <button type="submit" @click.prevent="if(confirm('Xóa sản phẩm này?')) $el.form.submit()">Xóa</button>
                                     </form>
 
                                 </td>

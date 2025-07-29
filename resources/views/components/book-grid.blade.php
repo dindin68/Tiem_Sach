@@ -1,7 +1,9 @@
 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
     @foreach ($books as $book)
         <div x-data="{ open: false }"
-            class="bg-white rounded-md shadow hover:shadow-lg transition duration-300 overflow-hidden group flex flex-col">
+            class="bg-white rounded-md shadow hover:shadow-lg 
+                transition duration-300 overflow-hidden group 
+                flex flex-col">
 
             {{-- Ảnh sách --}}
             @if ($book->images->first())

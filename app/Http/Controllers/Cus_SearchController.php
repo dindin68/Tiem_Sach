@@ -22,7 +22,9 @@ class Cus_SearchController extends Controller
             ->where('name', 'like', "%{$query}%")
             ->get();
 
-        return view('customer.result_search', compact('query', 'books', 'authors'));
+        $type = $books->count() > 0 ? 'book' : ($authors->count() > 0 ? 'author' : 'none');
+
+        return view('customer.result_search', compact('query', 'books', 'authors','type'));
     }
 }
 

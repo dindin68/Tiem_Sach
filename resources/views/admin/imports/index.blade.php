@@ -57,7 +57,7 @@
                         <td class="border px-4 py-2 text-green-700 font-semibold">
                             {{ number_format($import->total_cost, 0, ',', '.') }} đ
                         </td>
-                        <td class="border px-4 py-2">{{ $import->admin->name ?? 'Không rõ' }}</td>
+                        <td class="border px-4 py-2">{{ $import->admin->name ?? 'Admin' }}</td>
                         <td class="border px-4 py-2 space-x-2">
                             <a href="{{ route('admin.imports.show', $import->id) }}"
                                class="text-indigo-600 hover:underline">Chi tiết</a>

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Import;
-use App\Models\ImportItem;
+use App\Models\Admin;
 use App\Models\Book;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -11,9 +11,24 @@ use Illuminate\Http\Request;
 
 class ImportController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $imports = Import::with('admin')->orderByDesc('date')->paginate(10);
+        $query = Import::with('admin');
+
+        if ($request->filled('import_id')) {
+            $query->where('id', 'like', '%' . $request->import_id . '%');
+        }
+
+        if ($request->filled('date_from')) {
+            $query->whereDate('date', '>=', $request->date_from);
+        }
+
+        if ($request->filled('date_to')) {
+            $query->whereDate('date', '<=', $request->date_to);
+        }
+
+        $imports = $query->orderByDesc('date')->paginate(10);
+
         return view('admin.imports.index', compact('imports'));
     }
 

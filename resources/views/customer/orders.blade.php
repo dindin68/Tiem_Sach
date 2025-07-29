@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="max-w-5xl mx-auto p-4 sm:p-6">
-    <h2 class="text-2xl sm:text-3xl text-indigo-800 mb-6">Lịch sử đơn hàng</h2>
+    <h2 class="text-2xl sm:text-3xl text-indigo-800 mb-6">Đơn hàng</h2>
 
     @forelse($orders as $order)
         <div class="bg-white border border-gray-200 rounded-lg shadow-sm mb-4 p-5 hover:shadow-md transition">
